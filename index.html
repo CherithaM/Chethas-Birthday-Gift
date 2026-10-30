@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy 11th Birthday Chethas! 🎂 Birthday Challenge & Mystery Wheel</title>
+  <meta name="description" content="A special 11th Birthday Gift Surprise for Chethas! Beat the 5-second birthday quiz challenge to unlock the magical gift wheel.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&family=Outfit:wght@400;600;800;900&family=Bungee&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Test Mode Top Notice Banner (Hidden in Live Mode) -->
+  <aside id="test-mode-banner" class="test-banner hidden" aria-label="Testing Mode Active">
+    <div class="test-banner-content">
+      <span class="test-badge">🧪 TEST MODE ACTIVE</span>
+      <span class="test-desc">Spins are <strong>NOT saved</strong>. You can test the 5s quiz, wheel creep physics, and prize reveals!</span>
+      <div class="test-controls">
+        <label for="test-gift-selector">Test Prize:</label>
+        <select id="test-gift-selector" class="test-select">
+          <option value="random">🎲 Random Mystery</option>
+          <option value="0">🎁 1. Telescope</option>
+          <option value="1">🎁 2. Microscope</option>
+          <option value="2">🎁 3. Adidas Shoes</option>
+          <option value="3">🎁 4. ₹3000 Amazon Voucher</option>
+          <option value="4">🎁 5. Yonex Badminton Racquet</option>
+          <option value="5">🎁 6. Trip to Beach 🏖️</option>
+          <option value="6">🎁 7. Foldable Carrom Board</option>
+        </select>
+        <button id="skip-quiz-btn" class="btn-sm-test">⚡ Skip Quiz</button>
+        <button id="exit-test-mode-btn" class="btn-exit-test">Exit Test Mode</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Background Layer: Only Uploaded Photo of Chethas (Clear & Bright) + Floating CHETHAS Watermarks -->
+  <div class="photo-collage-bg" id="photo-collage-bg" aria-hidden="true">
+    <div class="hero-photo-layer" style="background-image: url('assets/chethas_real.jpg');"></div>
+    
+    <!-- Repeating Watermark Typography: CHETHAS everywhere -->
+    <div class="chethas-watermark-wall">
+      <div class="watermark-row r1">
+        <span>CHETHAS</span><span>CHETHAS</span><span>CHETHAS</span><span>CHETHAS</span><span>CHETHAS</span>
+      </div>
+      <div class="watermark-row r2">
+        <span>CHETHAS • 11</span><span>CHETHAS • 11</span><span>CHETHAS • 11</span><span>CHETHAS • 11</span>
+      </div>
+      <div class="watermark-row r3">
+        <span>CHETHAS</span><span>CHETHAS</span><span>CHETHAS</span><span>CHETHAS</span><span>CHETHAS</span>
+      </div>
+      <div class="watermark-row r4">
+        <span>CHETHAS • HAPPY 11TH</span><span>CHETHAS • HAPPY 11TH</span><span>CHETHAS • HAPPY 11TH</span>
+      </div>
+      <div class="watermark-row r5">
+        <span>CHETHAS</span><span>CHETHAS</span><span>CHETHAS</span><span>CHETHAS</span><span>CHETHAS</span>
+      </div>
+      <div class="watermark-row r6">
+        <span>CHETHAS • 11TH BIRTHDAY</span><span>CHETHAS • 11TH BIRTHDAY</span><span>CHETHAS • 11TH BIRTHDAY</span>
+      </div>
+    </div>
+
+    <!-- Soft Vignette so Wheel & Quiz Remain Super Sharp -->
+    <div class="collage-tint"></div>
+  </div>
+
+  <!-- Interactive Floating Balloons Layer -->
+  <div id="balloons-container" class="balloons-layer"></div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Top Navigation & Controls Header (Mobile Optimized) -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="birthday-avatar-badge">
+        <img src="assets/chethas_real.jpg" alt="Chethas" class="avatar-mini-img">
+        <span class="badge-pill">🎂 Chethas is 11!</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <!-- Music Player Floating Widget (Icon Only on Mobile) -->
+      <button id="music-toggle-btn" class="icon-circle-btn" title="Toggle Birthday Music" aria-label="Toggle Birthday Music">
+        <span class="music-disc" id="music-disc">🎵</span>
+      </button>
+
+      <!-- Remote Share / Live Sync Badge (Icon Only on Mobile) -->
+      <button id="remote-sync-btn" class="icon-circle-btn pill-live" title="Remote Watch & Screen Sharing" aria-label="Remote Watch">
+        <span class="live-dot"></span>
+        <span class="btn-icon">📡</span>
+      </button>
+
+      <!-- Parent Admin Settings Toggle (Discreet Gear Icon) -->
+      <button id="parent-admin-btn" class="icon-circle-btn" title="Parent Controls & Reset" aria-label="Settings">
+        ⚙️
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Experience Container -->
+  <main class="main-content">
+    
+    <!-- STAGE 1: Interactive Birthday Quiz Challenge (MUST BE SOLVED TO UNLOCK THE WHEEL) -->
+    <section id="quiz-stage" class="quiz-container">
+      <div class="quiz-card">
+        <div class="quiz-header">
+          <div class="quiz-avatar-hero">
+            <img src="assets/chethas_real.jpg" alt="Chethas" class="quiz-hero-photo">
+            <span class="quiz-tag-pill">🔥 11TH BIRTHDAY CHALLENGE 🔥</span>
+          </div>
+          <h2>Unlock Your Birthday Gift!</h2>
+          <p class="quiz-sub">Answer 3 speed questions in <strong>5 seconds</strong> each to open the wheel!</p>
+        </div>
+
+        <!-- Big 5s Timer Display -->
+        <div class="quiz-timer-container">
+          <div class="timer-circle" id="timer-circle">
+            <span id="quiz-timer-seconds">5</span>
+            <span class="timer-unit">SEC</span>
+          </div>
+          <div class="timer-bar-wrap">
+            <div id="timer-bar" class="timer-bar"></div>
+          </div>
+        </div>
+
+        <!-- Question Counter & Body -->
+        <div class="quiz-body">
+          <div class="question-tracker" id="question-tracker">Question 1 of 3</div>
+          <div class="question-text" id="question-text">Whom do you like the most?</div>
+
+          <!-- Options Grid -->
+          <div class="options-grid" id="options-grid">
+            <!-- Dynamically populated -->
+          </div>
+
+          <!-- Feedback message -->
+          <div id="quiz-feedback-msg" class="quiz-feedback"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAGE 2: The Mystery Spin Wheel Stage (Hidden initially until Quiz is solved) -->
+    <section id="wheel-stage-section" class="wheel-section hidden">
+      <div class="hero-banner">
+        <div class="bday-ribbon">🌟 LEVEL 11 UNLOCKED • CHETHAS'S LUCKY WHEEL 🌟</div>
+        <h2 class="hero-title">
+          <span class="grad-text">SPIN YOUR LUCKY CHARM</span>
+          <span class="sparkle">✨</span>
+        </h2>
+        <p class="hero-subtitle">
+          Pick your lucky number from <strong>1 to 7</strong>!
+          <br>Watch the wheel spin, slow down, and crawl into your surprise gift!
+          <br><strong class="highlight-warn">⚠️ You only get 1 lucky spin!</strong>
+        </p>
+      </div>
+
+      <!-- The 3D Wheel Stage -->
+      <div class="wheel-stage-wrapper">
+        <div class="wheel-aura"></div>
+
+        <!-- Pointer / Ticker Arrow -->
+        <div class="wheel-pointer-container">
+          <div class="wheel-pointer" id="wheel-pointer">
+            <svg viewBox="0 0 40 60" width="40" height="60" class="pointer-svg">
+              <defs>
+                <linearGradient id="pointerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ffd700" />
+                  <stop offset="50%" stop-color="#ff9100" />
+                  <stop offset="100%" stop-color="#e65100" />
+                </linearGradient>
+                <filter id="pointerShadow">
+                  <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="rgba(0,0,0,0.5)" />
+                </filter>
+              </defs>
+              <polygon points="20,58 2,12 14,4 26,4 38,12" fill="url(#pointerGrad)" filter="url(#pointerShadow)" stroke="#ffffff" stroke-width="2" />
+              <circle cx="20" cy="18" r="6" fill="#fff" />
+              <circle cx="20" cy="18" r="3" fill="#e65100" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- The Wheel Itself -->
+        <div class="wheel-outer-rim" id="wheel-outer-rim">
+          <div class="led-rim" id="led-rim"></div>
+          <canvas id="wheel-canvas" width="700" height="700"></canvas>
+
+          <button id="spin-hub-btn" class="spin-center-hub" aria-label="Spin the wheel">
+            <div class="hub-inner">
+              <span class="hub-spin-text">SPIN!</span>
+              <span class="hub-sub">CHETHAS 11</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Spin Action Bar -->
+      <div class="spin-action-bar">
+        <button id="big-spin-btn" class="big-spin-action-btn">
+          <span class="btn-shine"></span>
+          <span class="spin-icon">🎰</span>
+          <span id="spin-btn-label">SPIN FOR YOUR BIRTHDAY GIFT!</span>
+        </button>
+        <div id="spin-status-msg" class="spin-status-msg">
+          Ready for the spin! Fortune is waiting for you, Chethas! 🍀
+        </div>
+      </div>
+
+      <!-- Mystery Numbers Legend Shelf (Clean Numbers 1 to 7) -->
+      <section class="mystery-teaser-shelf">
+        <div class="shelf-header">
+          <span class="shelf-tag">MYSTERY VAULT</span>
+          <h3>7 Hidden Lucky Numbers</h3>
+          <p class="shelf-sub">Which lucky number holds your favorite present? Spin to discover!</p>
+        </div>
+        <div class="mystery-boxes-row">
+          <div class="mystery-vault-box"><span class="vault-num">1</span><span class="vault-status">🔒 Sealed</span></div>
+          <div class="mystery-vault-box"><span class="vault-num">2</span><span class="vault-status">🔒 Sealed</span></div>
+          <div class="mystery-vault-box"><span class="vault-num">3</span><span class="vault-status">🔒 Sealed</span></div>
+          <div class="mystery-vault-box"><span class="vault-num">4</span><span class="vault-status">🔒 Sealed</span></div>
+          <div class="mystery-vault-box"><span class="vault-num">5</span><span class="vault-status">🔒 Sealed</span></div>
+          <div class="mystery-vault-box"><span class="vault-num">6</span><span class="vault-status">🔒 Sealed</span></div>
+          <div class="mystery-vault-box"><span class="vault-num">7</span><span class="vault-status">🔒 Sealed</span></div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <!-- Grand Winning Celebration Modal -->
+  <div id="winner-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card winner-card">
+      <div class="winner-confetti-badge">🎉 REVEALED! IT'S YOUR LUCKY CHARM! 🎁</div>
+      <h2 id="winner-celebrate-title">HAPPY 11TH BIRTHDAY CHETHAS!</h2>
+      <p class="winner-subtitle">The wheel has crept into its final stop and revealed your gift:</p>
+
+      <div class="winner-gift-display">
+        <div class="winner-img-frame">
+          <img id="winner-gift-image" src="assets/telescope.jpg" alt="Winning Gift Item">
+          <div class="winner-glow"></div>
+        </div>
+        <div class="winner-gift-details">
+          <span class="winner-tag" id="winner-gift-tag">SPECIAL 11TH BIRTHDAY GIFT</span>
+          <h3 id="winner-gift-name">Luzsco Astronomical Telescope</h3>
+          <p id="winner-gift-desc">Explore deep space, moon craters, and stars! With adjustable tripod and crystal-clear optics.</p>
+          <div class="gift-action-links" id="gift-action-links">
+            <a id="winner-amazon-link" href="#" target="_blank" rel="noopener noreferrer" class="amazon-btn">
+              <span>View On Amazon.in</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="personal-bday-note">
+        <div class="heart-icon">❤️</div>
+        <div class="note-text">
+          <strong>Happy 11th Birthday Chethas!</strong>
+          <p>"Even though I am in a remote location right now, my heart, love, and blessings are right there cheering for you. You make us so proud every single day!"</p>
+          <span class="note-signature">— With all my love, Dad / Mom 🎂</span>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="pop-more-balloons-btn" class="action-btn glow-purple">🎈 Release Celebration Balloons</button>
+        <button id="test-again-btn" class="action-btn-test hidden">🔄 Spin Again (Test Mode)</button>
+        <button id="modal-close-btn" class="action-btn-outline">Close & View Page</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Remote Screenshare / Live Watch Modal -->
+  <div id="remote-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card remote-card">
+      <button class="modal-close-x" id="remote-close-x">&times;</button>
+      <div class="remote-header">
+        <div class="remote-icon">📡</div>
+        <div>
+          <h3>Remote Watch & Live Presentation</h3>
+          <p>Watch Chethas take the quiz and spin the wheel in real-time!</p>
+        </div>
+      </div>
+
+      <div class="remote-options-grid">
+        <!-- Live WebRTC Screenshare -->
+        <div class="remote-box">
+          <h4>Option 1: Direct Screen Share</h4>
+          <p>Chethas clicks below to beam his screen directly to you over WebRTC.</p>
+          <div class="share-controls">
+            <button id="start-screenshare-btn" class="btn-primary">
+              📹 Share Chethas's Screen
+            </button>
+            <button id="view-screenshare-btn" class="btn-secondary">
+              👁️ Watch Live Stream
+            </button>
+          </div>
+          <div id="screenshare-status" class="status-indicator">Ready to connect</div>
+          <div id="stream-container" class="stream-view hidden">
+            <video id="remote-video" autoplay playsinline controls></video>
+          </div>
+        </div>
+
+        <!-- Real-Time State Sync Room -->
+        <div class="remote-box">
+          <h4>Option 2: Real-time Live Mirror Room</h4>
+          <p>Both open the page with the same room. When Chethas plays, your screen mirrors everything!</p>
+          
+          <div class="room-copy-box">
+            <label for="parent-link-input">Parent Remote Watch Link (For You):</label>
+            <div class="input-with-button">
+              <input type="text" id="parent-link-input" readonly>
+              <button id="copy-parent-link-btn" class="btn-sm">Copy Link</button>
+            </div>
+          </div>
+
+          <div class="room-copy-box" style="margin-top: 10px;">
+            <label for="kid-link-input">Clean Link to Send to Chethas (Live Mode):</label>
+            <div class="input-with-button">
+              <input type="text" id="kid-link-input" readonly>
+              <button id="copy-kid-link-btn" class="btn-sm">Copy Link</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Parent Admin & Settings Drawer -->
+  <div id="admin-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card admin-card">
+      <button class="modal-close-x" id="admin-close-x">&times;</button>
+      <h3>⚙️ Parent Controls & Settings</h3>
+      <p>Configure the surprise for Chethas's 11th Birthday.</p>
+
+      <div class="admin-section">
+        <h4>1. Test Mode vs Live Mode</h4>
+        <p>In <strong>Test Mode</strong>, spins are unlimited and never saved to history. In <strong>Live Mode</strong>, only 1 spin is allowed for Chethas.</p>
+        <button id="admin-toggle-test-btn" class="btn-secondary">Switch Mode</button>
+        <span id="current-mode-status" style="margin-left: 10px; font-weight: 700; color: #ffd700;"></span>
+      </div>
+
+      <div class="admin-section">
+        <h4>2. Reset Quiz & Spin History</h4>
+        <p>Erase any saved quiz or spin so Chethas starts fresh from Question 1:</p>
+        <button id="admin-reset-spin-btn" class="btn-danger">🔄 Reset Quiz & Spin History</button>
+        <span id="reset-confirm-msg" class="confirm-msg"></span>
+      </div>
+
+      <div class="admin-section">
+        <h4>3. Guaranteed Lucky Charm (Optional)</h4>
+        <p>Pre-select if you have already ordered a specific gift:</p>
+        <select id="guaranteed-gift-select" class="styled-select">
+          <option value="random">🎲 Pure Random (Fair Luck)</option>
+          <option value="0">🔭 1. Luzsco Astronomical Telescope</option>
+          <option value="1">🔬 2. LEVIXA 3-in-1 Science Microscope</option>
+          <option value="2">👟 3. Adidas ZapCore Running Shoes</option>
+          <option value="3">💳 4. ₹3,000 Amazon Gift Voucher</option>
+          <option value="4">🏸 5. Yonex Astrox Lite 27i Badminton Racquet</option>
+          <option value="5">🏖️ 6. Trip to Beach (Family Vacation)</option>
+          <option value="6">🎯 7. WRF Foldable Carrom Board</option>
+        </select>
+      </div>
+
+      <div class="admin-footer">
+        <button id="admin-save-btn" class="btn-primary">Done & Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
